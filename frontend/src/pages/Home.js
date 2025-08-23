@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet';
-import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { ArrowDownIcon } from '@heroicons/react/24/outline';
 
@@ -165,29 +163,145 @@ const RoastGenerator = () => {
 const Home = () => {
 
   return (
-    <React.Fragment>
-      <Helmet>
-        <title>Get Demotivated With Me | Demotivation Station</title>
-        <meta name="description" content="Play with demotivating prompts, voice generators, and more. Get demotivated in style!" />
-        <meta property="og:title" content="Get Demotivated With Me" />
-        <meta property="og:description" content="Play with demotivating prompts, voice generators, and more. Get demotivated in style!" />
-        <meta property="og:image" content="/og-image.png" />
-        <meta property="og:url" content="https://demotivationstation.com" />
-        return (
-          <>
-            <Helmet>
-              <title>Get Demotivated With Me | Demotivation Station</title>
-              <meta name="description" content="Play with demotivating prompts, voice generators, and more. Get demotivated in style!" />
-              <meta property="og:title" content="Get Demotivated With Me" />
-              <meta property="og:description" content="Play with demotivating prompts, voice generators, and more. Get demotivated in style!" />
-              <meta property="og:image" content="/og-image.png" />
-              <meta property="og:url" content="https://demotivationstation.com" />
-              <meta name="twitter:card" content="summary_large_image" />
-            </Helmet>
-            <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-blue-50">
-              {/* ...existing Home page content goes here... */}
+    <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-blue-50">
+      {/* Hero Section */}
+      <section className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
+        {/* Background Animation */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/25 rounded-full filter blur-xl animate-blob"></div>
+          <div className="absolute top-20 right-10 w-72 h-72 bg-emerald-500/25 rounded-full filter blur-xl animate-blob animation-delay-2000"></div>
+          <div className="absolute -bottom-8 left-20 w-72 h-72 bg-purple-500/25 rounded-full filter blur-xl animate-blob animation-delay-4000"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Hero Content Grid */}
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left Side - Hero Text & CTAs */}
+            <div className="text-left">
+              <div className="animate-fade-in">
+                <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
+                  Get Demotivated
+                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-600">
+                    With Me
+                  </span>
+                </h1>
+                
+                {/* Rotating Taglines */}
+                <div className="mb-8 h-32">
+                  <div className="rotating-taglines">
+                    <p className="tagline text-xl md:text-2xl text-gray-700 leading-relaxed font-medium opacity-0 absolute">
+                      "Feeling too positive? Let our AI bring you back down to reality with a sharp dose of perspective."
+                    </p>
+                    <p className="tagline text-xl md:text-2xl text-gray-700 leading-relaxed font-medium opacity-0 absolute">
+                      "Because not everything needs a silver lining — get demotivated today."
+                    </p>
+                    <p className="tagline text-xl md:text-2xl text-gray-700 leading-relaxed font-medium opacity-0 absolute">
+                      "Your daily reminder that dreams are overrated and reality bites."
+                    </p>
+                    <p className="tagline text-xl md:text-2xl text-gray-700 leading-relaxed font-medium opacity-0 absolute">
+                      "Too much positivity is dangerous. Balance it out with a little negativity."
+                    </p>
+                    <p className="tagline text-xl md:text-2xl text-gray-700 leading-relaxed font-medium opacity-0 absolute">
+                      "We don't sugarcoat. We salt your wounds — with style."
+                    </p>
+                    <p className="tagline text-xl md:text-2xl text-gray-700 leading-relaxed font-medium opacity-0 absolute">
+                      "Motivation is temporary. Demotivation is forever."
+                    </p>
+                    <p className="tagline text-xl md:text-2xl text-gray-700 leading-relaxed font-medium opacity-0 absolute">
+                      "Lower your expectations and you'll never be disappointed."
+                    </p>
+                    <p className="tagline text-xl md:text-2xl text-gray-700 leading-relaxed font-medium opacity-0 absolute">
+                      "Reality check: Your comfort zone is actually a prison."
+                    </p>
+                  </div>
+                </div>
+                
+                <p className="text-lg text-gray-600 mb-8 max-w-2xl leading-relaxed">
+                  Professional dream crushing since 2024. AI-powered reality checks delivered in celebrity voices.
+                </p>
+                
+                {/* Primary CTA Button */}
+                <div className="flex flex-col sm:flex-row gap-4 mb-8">
+                  <Link
+                    to="/generator"
+                    className="group relative inline-flex items-center justify-center px-10 py-5 text-xl font-bold text-white bg-gradient-to-r from-red-600 via-red-700 to-red-800 rounded-xl shadow-2xl hover:shadow-red-500/25 transform hover:scale-105 transition-all duration-300"
+                  >
+                    <div className="absolute -inset-0.5 bg-gradient-to-r from-red-600 to-red-800 rounded-xl blur opacity-40 group-hover:opacity-100 transition duration-300"></div>
+                    <div className="relative flex items-center space-x-3">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 18.657A8 8 0 716.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+                      </svg>
+                      <span>Get Demotivated</span>
+                    </div>
+                  </Link>
+                  
+                  <Link
+                    to="/voice"
+                    className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-gray-700 bg-white border-2 border-gray-300 rounded-xl shadow-lg hover:shadow-xl hover:border-gray-400 transform hover:scale-105 transition-all duration-300"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                      </svg>
+                      <span>Try Celebrity Voices</span>
+                    </div>
+                  </Link>
+                </div>
+                
+                {/* Secondary Actions */}
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Link
+                    to="/chat"
+                    className="group relative inline-flex items-center justify-center px-6 py-3 text-base font-medium text-purple-700 bg-purple-50 border border-purple-200 rounded-lg hover:bg-purple-100 hover:border-purple-300 transition-all duration-300"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-3.582 8-8 8a8.955 8.955 0 01-2.172-.273L7 21l1.273-3.828C7.482 16.467 7 15.264 7 14c0-4.418 3.582-8 8-8s8 3.582 8 8z" />
+                      </svg>
+                      <span>Start Chatting</span>
+                    </div>
+                  </Link>
+                </div>
+              </div>
             </div>
-          </>
+
+            {/* Right Side - Interactive Feature Cards */}
+            <div className="grid grid-cols-2 gap-6">
+              {/* Text Generator Card */}
+              <div className="group relative">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl blur opacity-30 group-hover:opacity-75 transition duration-500"></div>
+                <div className="relative bg-white/90 backdrop-blur-lg rounded-2xl p-6 h-64 flex flex-col justify-between transform group-hover:scale-105 transition-all duration-300 cursor-pointer border border-blue-200/50 group-hover:border-blue-500/50 shadow-xl group-hover:shadow-2xl">
+                  <div>
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-4 group-hover:rotate-6 transition-transform duration-300 shadow-lg">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">Generator</h3>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      AI-powered reality checks tailored to your situation
+                    </p>
+                  </div>
+                  <Link
+                    to="/generator"
+                    className="w-full py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-200 text-sm shadow-lg hover:shadow-xl text-center block"
+                  >
+                    Try Now
+                  </Link>
+                </div>
+              </div>
+
+              {/* Chat Card */}
+              <Link to="/chat" className="group relative block">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl blur opacity-30 group-hover:opacity-75 transition duration-500"></div>
+                <div className="relative bg-white/90 backdrop-blur-lg rounded-2xl p-6 h-64 flex flex-col justify-between transform group-hover:scale-105 transition-all duration-300 cursor-pointer border border-purple-200/50 group-hover:border-purple-500/50 shadow-xl group-hover:shadow-2xl">
+                  <div>
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-4 group-hover:rotate-6 transition-transform duration-300 shadow-lg">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-3.582 8-8 8a8.955 8.955 0 01-2.172-.273L7 21l1.273-3.828C7.482 16.467 7 15.264 7 14c0-4.418 3.582-8 8-8s8 3.582 8 8z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">Chat</h3>
                     <p className="text-gray-600 text-sm leading-relaxed">
                       Converse with AI that switches between helpful and brutal
                     </p>

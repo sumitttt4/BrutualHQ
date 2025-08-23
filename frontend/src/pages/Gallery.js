@@ -171,23 +171,8 @@ const Gallery = () => {
   };
 
   return (
-    <div className="min-h-screen w-full relative">
-      {/* Aurora Dream Vivid Bloom */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          background: `
-            radial-gradient(ellipse 80% 60% at 70% 20%, rgba(175, 109, 255, 0.85), transparent 68%),
-            radial-gradient(ellipse 70% 60% at 20% 80%, rgba(255, 100, 180, 0.75), transparent 68%),
-            radial-gradient(ellipse 60% 50% at 60% 65%, rgba(255, 235, 170, 0.98), transparent 68%),
-            radial-gradient(ellipse 65% 40% at 50% 60%, rgba(120, 190, 255, 0.3), transparent 68%),
-            linear-gradient(180deg, #f7eaff 0%, #fde2ea 100%)
-          `,
-        }}
-      />
-      
-      <div className="py-12 px-4 relative z-10">
-        <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen py-12 px-4">
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
@@ -242,8 +227,7 @@ const Gallery = () => {
         </div>
 
         {/* Quotes Grid */}
-        {filteredQuotes.length > 0 && (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filteredQuotes.map((quote) => (
             <div
               key={quote.id}
@@ -286,14 +270,22 @@ const Gallery = () => {
                       {isFavorite(quote.id) ? (
                         <HeartSolidIcon className="h-4 w-4 text-red-500" />
                       ) : (
-                        <HeartIcon className="h-4 w-4 text-gray-400" />
+                        <HeartIcon className="h-4 w-4" />
                       )}
                     </button>
                   </div>
                 </div>
-              ))}
+
+                {/* Copy Feedback */}
+                {copied === quote.id && (
+                  <p className="text-xs text-green-600 animate-fade-in">
+                    Copied to clipboard!
+                  </p>
+                )}
+              </div>
             </div>
-          )}
+          ))}
+        </div>
 
         {/* No Results */}
         {filteredQuotes.length === 0 && (
@@ -327,7 +319,6 @@ const Gallery = () => {
             </p>
           </div>
         )}
-        </div>
       </div>
     </div>
   );

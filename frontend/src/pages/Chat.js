@@ -38,6 +38,7 @@ const Chat = () => {
     setMessages(prev => [...prev, userMessage]);
     setInputMessage('');
     setIsLoading(true);
+    setError('');
 
     try {
       const response = await fetch('/api/chat', {
@@ -46,68 +47,34 @@ const Chat = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          message: inputMessage.trim(),
-          conversation: messages
-        })
+          message: userMessage.content,
+          conversation: messages.slice(-10) // Send last 10 messages for context
+        }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error('Failed to get response');
+        throw new Error(data.error || 'Failed to get AI response');
       }
 
-      const data = await response.json();
-      
       const aiMessage = {
         id: Date.now() + 1,
         type: 'ai',
-        content: data.message || data.response || "Well, this is awkward. Even I'm speechless.",
+        content: data.message,
+        mode: data.mode || 'helpful',
         timestamp: new Date()
       };
 
       setMessages(prev => [...prev, aiMessage]);
-      
     } catch (err) {
-      console.error('Error:', err);
-      const errorMessage = {
-        id: Date.now() + 1,
-        type: 'ai',
-        content: "Something went wrong. Apparently even AI can have bad days.",
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, errorMessage]);
+      setError(err.message || 'Something went wrong. Please try again.');
+      console.error('Chat error:', err);
     } finally {
       setIsLoading(false);
+      inputRef.current?.focus();
     }
   };
-
-  return (
-      <div className="min-h-screen w-full relative">
-        {/* Aurora Dream Vivid Bloom */}
-        <div
-          className="absolute inset-0 z-0"
-          style={{
-            background: `
-              radial-gradient(ellipse 80% 60% at 70% 20%, rgba(175, 109, 255, 0.85), transparent 68%),
-              radial-gradient(ellipse 70% 60% at 20% 80%, rgba(255, 100, 180, 0.75), transparent 68%),
-              radial-gradient(ellipse 60% 50% at 60% 65%, rgba(255, 235, 170, 0.98), transparent 68%),
-              radial-gradient(ellipse 65% 40% at 50% 60%, rgba(120, 190, 255, 0.3), transparent 68%),
-              linear-gradient(180deg, #f7eaff 0%, #fde2ea 100%)
-            `,
-          }}
-        />
-        <div className="max-w-4xl mx-auto h-[calc(100vh-8rem)] flex flex-col relative z-10">
-          {/* Header */}
-          <div className="text-center mb-6">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-              AI Chat Assistant
-            </h1>
-            <p className="text-gray-600">
-              Have a conversation with our AI. Ask questions, get advice, or just chat!
-            </p>
-          </div>
-        </div>
-      </div>
-  );
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {

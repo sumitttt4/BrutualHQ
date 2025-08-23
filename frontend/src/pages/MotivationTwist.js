@@ -40,20 +40,20 @@ const MotivationTwist = () => {
         },
         body: JSON.stringify({
           message: randomMessage,
-          tone: 'brutal'
-        })
+          tone: 'motivation' // This will trigger the AI to provide both perspectives
+        }),
       });
 
+      const data = await apiResponse.json();
+
       if (!apiResponse.ok) {
-        throw new Error('Failed to fetch response');
+        throw new Error(data.error || 'Failed to get motivational response');
       }
 
-      const data = await apiResponse.json();
-      setDemotivation(data.message || data.response || "Reality has a way of being... underwhelming.");
-      
+      setResponse(data.message);
     } catch (err) {
+      setError(err.message || 'Something went wrong. Even motivation needs a break sometimes.');
       console.error('Error:', err);
-      setError('Even our reality check service is broken. How fitting.');
     } finally {
       setLoading(false);
     }
@@ -90,49 +90,34 @@ const MotivationTwist = () => {
   const isFavorite = response && favorites.some(fav => fav.text === response);
 
   return (
-    <div className="min-h-screen w-full relative">
-      {/* Aurora Dream Vivid Bloom */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          background: `
-            radial-gradient(ellipse 80% 60% at 70% 20%, rgba(175, 109, 255, 0.85), transparent 68%),
-            radial-gradient(ellipse 70% 60% at 20% 80%, rgba(255, 100, 180, 0.75), transparent 68%),
-            radial-gradient(ellipse 60% 50% at 60% 65%, rgba(255, 235, 170, 0.98), transparent 68%),
-            radial-gradient(ellipse 65% 40% at 50% 60%, rgba(120, 190, 255, 0.3), transparent 68%),
-            linear-gradient(180deg, #f7eaff 0%, #fde2ea 100%)
-          `,
-        }}
-      />
-      
-      <div className="min-h-screen py-12 px-4 relative z-10">
-        <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              AI Motivation Center
-            </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Experience genuine AI-powered motivation. Sometimes you need encouragement to reach your potential.
-            </p>
-          </div>
+    <div className="min-h-screen py-12 px-4">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            AI Motivation Center
+          </h1>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Experience genuine AI-powered motivation. Sometimes you need encouragement to reach your potential.
+          </p>
+        </div>
 
-          {/* Feature Toggle */}
-          <div className="mb-8 text-center">
-            <div className="inline-flex bg-white/80 backdrop-blur-md rounded-lg p-1 shadow-md">
-              <button
-                onClick={() => setShowPositive(true)}
-                className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
-                  showPositive
-                    ? 'bg-indigo-600 text-white shadow-md'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                <div className="flex items-center space-x-2">
-                  <SparklesIcon className="h-5 w-5" />
-                  <span>Motivational Mode</span>
-                </div>
-              </button>
+        {/* Feature Toggle */}
+        <div className="mb-8 text-center">
+          <div className="inline-flex bg-white/80 backdrop-blur-md rounded-lg p-1 shadow-md">
+            <button
+              onClick={() => setShowPositive(true)}
+              className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
+                showPositive
+                  ? 'bg-indigo-600 text-white shadow-md'
+                  : 'text-gray-700 hover:bg-gray-100'
+              }`}
+            >
+              <div className="flex items-center space-x-2">
+                <SparklesIcon className="h-5 w-5" />
+                <span>Motivational Mode</span>
+              </div>
+            </button>
             <button
               onClick={() => setShowPositive(false)}
               className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
@@ -298,7 +283,6 @@ const MotivationTwist = () => {
             </p>
           </div>
         )}
-        </div>
       </div>
     </div>
   );

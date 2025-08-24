@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">Demotivation Station</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-4">BrutualHQ</h3>
             <p className="text-gray-600 mb-4 max-w-md">
               Professional demotivational services powered by AI. Sometimes you need a reality check.
             </p>
@@ -77,10 +77,10 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <a
-                  href="mailto:hello@demotivation.com"
+                  href="mailto:hello@brutualhq.com"
                   className="text-gray-600 hover:text-gray-900 transition-colors"
                 >
-                  hello@demotivation.com
+                  hello@brutualhq.com
                 </a>
               </li>
               <li>
@@ -93,8 +93,8 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-gray-200 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-500 text-sm">
-            © 2025 Demotivation Station. All rights reserved.
+            <p className="text-gray-500 text-sm">
+            © 2025 BrutualHQ. All rights reserved.
           </p>
           <p className="text-gray-400 text-xs mt-2 md:mt-0">
             Powered by OpenRouter AI

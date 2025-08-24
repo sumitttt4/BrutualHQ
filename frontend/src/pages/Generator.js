@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { ClipboardIcon, HeartIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid';
+import { useAuth } from '../contexts/AuthContext';
+import { useAnalytics } from '../contexts/AnalyticsContext';
 import LoadingSpinner from '../components/LoadingSpinner';
 import TypingEffect from '../components/TypingEffect';
+import UsageLimit from '../components/usage/UsageLimit';
 
 const Generator = () => {
   const [response, setResponse] = useState('');
@@ -12,15 +15,12 @@ const Generator = () => {
   const [hasGenerated, setHasGenerated] = useState(false);
   const [favorites, setFavorites] = useState([]);
   const [copied, setCopied] = useState(false);
+  const [showPricingModal, setShowPricingModal] = useState(false);
 
-  // Dramatic motivation sequence states
-  const [isMotivationMode, setIsMotivationMode] = useState(false);
-  const [showProgress, setShowProgress] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [progressText, setProgressText] = useState('');
-  const [showChoice, setShowChoice] = useState(false);
-  const [motivationResult, setMotivationResult] = useState('');
-  const [showTyping, setShowTyping] = useState(false);
+  const { user, isAuthenticated, hasUsageRemaining, updateUserUsage } = useAuth();
+  const { trackEvent, trackGeneration } = useAnalytics();
+
+
 
   useEffect(() => {
     const savedFavorites = localStorage.getItem('demotivator-favorites');
@@ -47,130 +47,83 @@ const Generator = () => {
     setLoading(true);
     setError('');
     setResponse('');
-    
-    try {
-      const messages = [
-        "I'm feeling motivated today!",
-        "I think I can achieve anything!",
-        "I'm ready to conquer the world!",
-        "I believe in myself!",
-        "I'm going to be successful!",
-        "Today is going to be amazing!",
-        "I'm unstoppable!",
-        "I can do anything I set my mind to!",
-        "I'm feeling confident!",
-        "I'm going to make it happen!"
-      ];
-      
-      const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-      
-      const apiResponse = await fetch('/api/demotivate', {
+
+    // small pool of random user prompts used to seed the AI call
+    const messages = [
+      "I'm feeling motivated today!",
+      "I think I can achieve anything!",
+      "I'm ready to conquer the world!",
+      "I believe in myself!",
+      "I'm going to be successful!",
+      "Today is going to be amazing!",
+      "I'm unstoppable!",
+      "I can do anything I set my mind to!",
+      "I'm feeling confident!",
+      "I'm going to make it happen!"
+    ];
+
+    const cannedFallbacks = [
+      "Reality check: your grand plan sounds lovely — in a fantasy novel. Back to the drawing board.",
+      "Here's the truth: most of that will be forgotten by lunch. Try smaller, less delusional goals.",
+      "If optimism were a product, you'd be overordering. Maybe ship one thing before the empire.",
+      "Nice energy. Sadly, optimism doesn't replace work — but it does make for a good story.",
+    ];
+
+    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+
+    // helper to call API (returns parsed json or throws)
+    const callApi = async () => {
+      const res = await fetch('/api/demotivate', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: randomMessage,
-          tone: tone
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: randomMessage, tone }),
       });
 
-      const data = await apiResponse.json();
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to get demotivational response');
+      return data;
+    };
 
-      if (!apiResponse.ok) {
-        throw new Error(data.error || 'Failed to get demotivational response');
+    try {
+      // attempt #1
+      try {
+        const data = await callApi();
+        setResponse(data.message);
+        setHasGenerated(true);
+        trackGeneration('demotivation', tone, true);
+        return;
+      } catch (firstErr) {
+        console.warn('First AI attempt failed, retrying once...', firstErr);
+        // wait briefly then retry once
+        await new Promise((r) => setTimeout(r, 1000));
+        try {
+          const data = await callApi();
+          setResponse(data.message);
+          setHasGenerated(true);
+          trackGeneration('demotivation', tone, true);
+          return;
+        } catch (secondErr) {
+          console.error('Second AI attempt also failed:', secondErr);
+          // fall through to fallback
+        }
       }
 
-      setResponse(data.message);
+      // If we reach here, both attempts failed — present a friendly fallback
+      const fallback = cannedFallbacks[Math.floor(Math.random() * cannedFallbacks.length)];
+      setResponse(fallback);
       setHasGenerated(true);
+      setError('Failed to get response from AI service — showing a fallback demotivation.');
+      trackGeneration('demotivation', tone, false);
+      trackEvent && trackEvent('demotivation_fallback');
     } catch (err) {
-      setError(err.message || 'Something went wrong. Even our demotivation is broken.');
-      console.error('Error:', err);
+      console.error('Unexpected error during demotivation flow:', err);
+      setError('Something went wrong. Even our demotivation is broken.');
     } finally {
       setLoading(false);
     }
   };
 
-  // Dramatic Motivation Sequence Functions
-  const startMotivationSequence = () => {
-    setIsMotivationMode(true);
-    setShowProgress(true);
-    setProgress(0);
-    setShowChoice(false);
-    setMotivationResult('');
-    setShowTyping(false);
-    setError('');
-    
-    const progressTexts = [
-      "Charging your positivity…",
-      "Filtering out all the excuses…",
-      "Cracking open a fortune cookie…",
-      "Checking if you're really ready for this…",
-      "Summoning the motivation spirits…",
-      "Double-checking your commitment level…"
-    ];
-    
-    let currentProgress = 0;
-    let textIndex = 0;
-    
-    const progressInterval = setInterval(() => {
-      currentProgress += Math.random() * 15 + 5; // Random progress between 5-20%
-      
-      if (currentProgress >= 100) {
-        currentProgress = 100;
-        setProgress(100);
-        setProgressText("Almost there...");
-        clearInterval(progressInterval);
-        
-        // Show the choice after a dramatic pause
-        setTimeout(() => {
-          setShowChoice(true);
-        }, 1000);
-      } else {
-        setProgress(currentProgress);
-        setProgressText(progressTexts[textIndex % progressTexts.length]);
-        textIndex++;
-      }
-    }, 800);
-  };
 
-  const handleMotivationChoice = (wantsMotivation) => {
-    if (wantsMotivation) {
-      // Generate actual motivation
-      const motivationalMessages = [
-        "You are capable of amazing things! Every challenge is an opportunity to grow, and every setback is a setup for a comeback. Keep pushing forward!",
-        "Your potential is limitless! The only thing standing between you and your dreams is the story you tell yourself. Rewrite that story today!",
-        "Success isn't about being perfect—it's about being persistent. Every small step forward is progress worth celebrating!",
-        "You have overcome 100% of your worst days so far. That's an incredible track record! Trust in your strength and resilience.",
-        "The best time to plant a tree was 20 years ago. The second best time is now. Start today, start small, but start!",
-        "Your current situation is not your final destination. Keep working, keep believing, and keep moving forward!"
-      ];
-      
-      const randomMotivation = motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)];
-      setMotivationResult(randomMotivation);
-      setShowTyping(true);
-      setShowChoice(false);
-    } else {
-      // Redirect to demotivation with cheeky message
-      setShowChoice(false);
-      setProgressText("Knew it. You can't handle the truth.");
-      setTimeout(() => {
-        setIsMotivationMode(false);
-        setShowProgress(false);
-        demotivateUser();
-      }, 1500);
-    }
-  };
-
-  const resetMotivationSequence = () => {
-    setIsMotivationMode(false);
-    setShowProgress(false);
-    setProgress(0);
-    setProgressText('');
-    setShowChoice(false);
-    setMotivationResult('');
-    setShowTyping(false);
-  };
 
   const copyToClipboard = async (text = null) => {
     try {
@@ -239,42 +192,26 @@ const Generator = () => {
           </div>
         </div>
 
-        {/* Generate Buttons */}
+        {/* Generate Button */}
         <div className="text-center mb-12">
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button
-              onClick={demotivateUser}
-              disabled={loading || showProgress}
-              className={`px-8 py-4 text-lg font-semibold rounded-lg shadow-lg transition-all duration-300 transform ${
-                loading || showProgress
-                  ? 'bg-gray-400 cursor-not-allowed text-gray-200' 
-                  : 'bg-indigo-600 hover:bg-indigo-700 text-white hover:shadow-xl hover:scale-105'
-              }`}
-            >
-              {loading ? (
-                <div className="flex items-center space-x-2">
-                  <LoadingSpinner />
-                  <span>Preparing Reality Check...</span>
-                </div>
-              ) : (
-                "Come Here, I'll Demotivate You"
-              )}
-            </button>
-            
-            <div className="text-gray-400 font-medium">or</div>
-            
-            <button
-              onClick={startMotivationSequence}
-              disabled={loading || showProgress}
-              className={`px-8 py-4 text-lg font-semibold rounded-lg shadow-lg transition-all duration-300 transform ${
-                loading || showProgress
-                  ? 'bg-gray-400 cursor-not-allowed text-gray-200'
-                  : 'bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 hover:from-purple-600 hover:via-pink-600 hover:to-red-600 text-white hover:shadow-xl hover:scale-105'
-              }`}
-            >
-              ✨ Generate Motivation
-            </button>
-          </div>
+          <button
+            onClick={demotivateUser}
+            disabled={loading}
+            className={`px-8 py-4 text-lg font-semibold rounded-lg shadow-lg transition-all duration-300 transform ${
+              loading
+                ? 'bg-gray-400 cursor-not-allowed text-gray-200' 
+                : 'bg-indigo-600 hover:bg-indigo-700 text-white hover:shadow-xl hover:scale-105'
+            }`}
+          >
+            {loading ? (
+              <div className="flex items-center space-x-2">
+                <LoadingSpinner />
+                <span>Preparing Reality Check...</span>
+              </div>
+            ) : (
+              "Come Here, I'll Demotivate You"
+            )}
+          </button>
         </div>
 
         {/* Error Display */}
@@ -284,121 +221,7 @@ const Generator = () => {
           </div>
         )}
 
-        {/* Dramatic Motivation Sequence */}
-        {isMotivationMode && (
-          <div className="mb-8 animate-fade-in">
-            <div className="bg-white/95 backdrop-blur-md rounded-xl p-8 shadow-2xl border-2 border-purple-200">
-              
-              {/* Progress Bar Section */}
-              {showProgress && !showChoice && !motivationResult && (
-                <div className="text-center">
-                  <h3 className="text-2xl font-bold text-gray-800 mb-6">
-                    {progressText === "Knew it. You can't handle the truth." ? 
-                      "Redirecting to Reality..." : 
-                      "Generating Your Motivation..."
-                    }
-                  </h3>
-                  
-                  {/* Progress Bar */}
-                  <div className="w-full bg-gray-200 rounded-full h-4 mb-4 overflow-hidden">
-                    <div 
-                      className={`h-full transition-all duration-500 ease-out rounded-full ${
-                        progressText === "Knew it. You can't handle the truth." ?
-                          'bg-gradient-to-r from-red-500 to-gray-600' :
-                          'bg-gradient-to-r from-purple-500 via-pink-500 to-red-500'
-                      }`}
-                      style={{ width: `${progress}%` }}
-                    ></div>
-                  </div>
-                  
-                  <p className={`text-lg font-medium ${
-                    progressText === "Knew it. You can't handle the truth." ?
-                      'text-red-600 text-xl font-bold' :
-                      'text-gray-600'
-                  }`}>
-                    {progressText}
-                  </p>
-                  
-                  <div className={`mt-4 text-2xl font-bold ${
-                    progressText === "Knew it. You can't handle the truth." ?
-                      'text-red-600' :
-                      'text-purple-600'
-                  }`}>
-                    {Math.round(progress)}%
-                  </div>
-                </div>
-              )}
 
-              {/* Suspense Choice Section */}
-              {showChoice && (
-                <div className="text-center">
-                  <h2 className="text-3xl font-extrabold text-gray-900 mb-8 leading-tight">
-                    Do you seriously want motivation?
-                  </h2>
-                  
-                  <p className="text-lg text-gray-600 mb-8">
-                    Last chance to back out before we hit you with the positivity...
-                  </p>
-                  
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <button
-                      onClick={() => handleMotivationChoice(true)}
-                      className="px-8 py-4 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300"
-                    >
-                      ✅ Yes, hit me with it
-                    </button>
-                    
-                    <button
-                      onClick={() => handleMotivationChoice(false)}
-                      className="px-8 py-4 bg-red-500 hover:bg-red-600 text-white font-bold rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300"
-                    >
-                      ❌ Nah, give me demotivation instead
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Motivation Result with Typing Effect */}
-              {motivationResult && (
-                <div className="text-center">
-                  <h3 className="text-2xl font-bold text-green-600 mb-6">
-                    Here's Your Motivation! 🌟
-                  </h3>
-                  
-                  <div className="bg-gradient-to-r from-green-50 to-blue-50 border-l-4 border-green-400 p-6 rounded-lg mb-6">
-                    {showTyping ? (
-                      <TypingEffect 
-                        text={motivationResult}
-                        speed={50}
-                        className="text-lg text-gray-800 leading-relaxed"
-                      />
-                    ) : (
-                      <p className="text-lg text-gray-800 leading-relaxed">
-                        {motivationResult}
-                      </p>
-                    )}
-                  </div>
-                  
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <button
-                      onClick={() => copyToClipboard(motivationResult)}
-                      className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg shadow-md transform hover:scale-105 transition-all duration-300"
-                    >
-                      📋 Copy Motivation
-                    </button>
-                    
-                    <button
-                      onClick={resetMotivationSequence}
-                      className="px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-lg shadow-md transform hover:scale-105 transition-all duration-300"
-                    >
-                      🔄 Try Again
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
 
         {/* Response Card */}
         {response && (

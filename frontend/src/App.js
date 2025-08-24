@@ -1,33 +1,53 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import { ThemeProvider } from './contexts/ThemeContext';
+import { AnalyticsProvider } from './contexts/AnalyticsContext';
+import { NotificationProvider } from './contexts/NotificationContext';
 import Header from './components/layout/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import Generator from './pages/Generator';
-import Gallery from './pages/Gallery';
-import MotivationTwist from './pages/MotivationTwist';
+import Motivation from './pages/Motivation';
 import Chat from './pages/Chat';
 import VoiceGenerator from './pages/VoiceGenerator';
+import Dashboard from './pages/Dashboard';
+import Terms from './pages/Terms';
+import APIDocumentation from './pages/APIDocumentation';
+import AuthLanding from './pages/AuthLanding';
 import NotFound from './pages/NotFound';
 
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-        <Header />
-        <main className="min-h-screen">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/generator" element={<Generator />} />
-            <Route path="/explore" element={<Gallery />} />
-            <Route path="/motivation" element={<MotivationTwist />} />
-            <Route path="/chat" element={<Chat />} />
-            <Route path="/voice" element={<VoiceGenerator />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
+      <ThemeProvider>
+        <AuthProvider>
+          <AnalyticsProvider>
+            <NotificationProvider>
+              <div className="min-h-screen bg-white text-slate-900 transition-colors duration-300">
+                <Header />
+                <main className="min-h-screen">
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/generator" element={<Generator />} />
+                    {/* Features page removed; Home now acts as the landing/features page */}
+                    <Route path="/motivation" element={<Motivation />} />
+                    <Route path="/chat" element={<Chat />} />
+                    <Route path="/voice" element={<VoiceGenerator />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/auth" element={<AuthLanding />} />
+                    <Route path="/terms" element={<Terms />} />
+                    <Route path="/privacy" element={<Terms />} />
+                    <Route path="/api-docs" element={<APIDocumentation />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </main>
+                <Footer />
+              </div>
+            </NotificationProvider>
+          </AnalyticsProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </Router>
   );
 }

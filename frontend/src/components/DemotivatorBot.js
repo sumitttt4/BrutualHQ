@@ -67,7 +67,7 @@ const DemotivatorBot = () => {
       {/* Header */}
       <div className="text-center space-y-4 animate-fade-in">
         <h1 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
-          Demotivation Station
+          BrutualHQ
         </h1>
         <p className="text-lg text-gray-600 max-w-md mx-auto">
           Feeling too positive? Let our AI bring you back down to earth with some quality demotivation.

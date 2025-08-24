@@ -186,7 +186,7 @@ const VoiceGenerator = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-8">
+    <div className="min-h-screen py-8" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Page Title */}
         <div className="text-center mb-12">
@@ -200,7 +200,7 @@ const VoiceGenerator = () => {
 
         {/* Input Mode Toggle */}
         <div className="flex justify-center mb-8">
-          <div className="bg-white rounded-xl p-2 shadow-lg border border-gray-200">
+          <div className="rounded-xl p-2 shadow-lg" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
             {['typing', 'voice', 'chat'].map((mode) => (
               <button
                 key={mode}
@@ -224,19 +224,20 @@ const VoiceGenerator = () => {
           
           {/* Chat History (only visible in chat mode) */}
           {inputMode === 'chat' && (
-            <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-                <h3 className="text-lg font-semibold text-gray-900">Chat History</h3>
+            <div style={{ borderRadius: 16, boxShadow: 'var(--card-shadow)', border: '1px solid var(--border)', overflow: 'hidden' }}>
+              <div style={{ padding: '16px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h3 style={{ fontWeight: 600, color: 'var(--text)' }}>Chat History</h3>
                 <button
                   onClick={clearChat}
-                  className="px-3 py-1 text-sm text-gray-500 hover:text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50"
+                  className="px-3 py-1 text-sm rounded-md"
+                  style={{ color: 'var(--muted-text)', border: '1px solid var(--border)', background: 'transparent' }}
                 >
                   Clear
                 </button>
               </div>
-              <div className="h-96 overflow-y-auto p-6">
+              <div style={{ height: 384, overflowY: 'auto', padding: 24 }}>
                 {chatHistory.length === 0 ? (
-                  <div className="flex items-center justify-center h-full text-gray-500">
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--muted-text)' }}>
                     Start a conversation to see your chat history
                   </div>
                 ) : (
@@ -246,13 +247,7 @@ const VoiceGenerator = () => {
                         key={msg.id}
                         className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                       >
-                        <div
-                          className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
-                            msg.sender === 'user'
-                              ? 'bg-indigo-600 text-white'
-                              : 'bg-gray-100 text-gray-900'
-                          }`}
-                        >
+                        <div style={{ maxWidth: 'min(80%, 360px)', padding: '10px 16px', borderRadius: 20, background: msg.sender === 'user' ? 'linear-gradient(135deg,var(--primary),var(--accent))' : 'var(--surface)', color: msg.sender === 'user' ? '#fff' : 'var(--text)' }}>
                           {msg.text}
                         </div>
                       </div>
@@ -264,41 +259,37 @@ const VoiceGenerator = () => {
           )}
 
           {/* Main Input Panel */}
-          <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
+          <div style={{ borderRadius: 16, boxShadow: 'var(--card-shadow)', border: '1px solid var(--border)', padding: 32, background: 'var(--surface)' }}>
             {/* Input Section */}
             {inputMode === 'typing' && (
               <div className="mb-8">
-                <label className="block text-lg font-semibold text-gray-900 mb-4">
+                <label className="block text-lg font-semibold mb-4" style={{ color: 'var(--text)' }}>
                   Enter your message
                 </label>
                 <textarea
                   value={userInput}
                   onChange={(e) => setUserInput(e.target.value)}
                   placeholder="Type something optimistic that needs crushing..."
-                  className="w-full h-32 px-4 py-3 border-2 border-gray-300 rounded-xl resize-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                  className="w-full h-32 px-4 py-3 rounded-xl resize-none transition-colors"
+                  style={{ border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)' }}
                 />
               </div>
             )}
 
             {inputMode === 'voice' && (
               <div className="mb-8 text-center">
-                <div className={`border-2 rounded-xl p-8 mb-4 transition-colors ${
-                  isRecording ? 'border-red-500 bg-red-50' : 'border-gray-300 bg-gray-50'
-                }`}>
-                  <div className={`text-6xl mb-4 ${isRecording ? 'text-red-500' : 'text-gray-400'}`}>
+                <div style={{ borderRadius: 12, padding: 24, marginBottom: 16, border: '1px solid var(--border)', background: isRecording ? 'rgba(248,113,113,0.04)' : 'var(--surface)' }}>
+                  <div style={{ fontSize: 48, marginBottom: 12, color: isRecording ? 'rgba(248,113,113,1)' : 'rgba(148,163,184,1)' }}>
                     🎤
                   </div>
-                  <p className={`text-lg mb-4 ${isRecording ? 'text-red-600' : 'text-gray-600'}`}>
+                  <p style={{ fontSize: 18, marginBottom: 12, color: isRecording ? 'rgba(248,113,113,0.9)' : 'var(--muted-text)' }}>
                     {isRecording ? 'Listening... Speak your delusions' : 'Click to start voice input'}
                   </p>
                   <button
                     onClick={startVoiceInput}
                     disabled={isRecording}
-                    className={`px-6 py-3 rounded-xl font-semibold transition-colors ${
-                      isRecording 
-                        ? 'bg-gray-400 text-gray-200 cursor-not-allowed' 
-                        : 'bg-indigo-600 hover:bg-indigo-700 text-white'
-                    }`}
+                    className="px-6 py-3 rounded-xl font-semibold"
+                    style={isRecording ? { background: 'var(--border)', color: 'var(--muted-text)', cursor: 'not-allowed' } : { background: 'linear-gradient(135deg,var(--primary),var(--accent))', color: '#fff' }}
                   >
                     {isRecording ? 'Recording...' : 'Start Recording'}
                   </button>
@@ -350,11 +341,8 @@ const VoiceGenerator = () => {
                   <button
                     key={index}
                     onClick={() => setSelectedVoice(voice)}
-                    className={`p-4 border-2 rounded-xl text-left transition-all ${
-                      selectedVoice?.name === voice.name
-                        ? 'border-indigo-500 bg-indigo-50'
-                        : 'border-gray-300 hover:border-gray-400 bg-white'
-                    }`}
+                    className={`p-4 rounded-xl text-left transition-all`}
+                    style={selectedVoice?.name === voice.name ? { border: '1px solid rgba(99,102,241,0.6)', background: 'rgba(99,102,241,0.06)', color: 'var(--text)' } : { border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text)' }}
                   >
                     <div className={`font-semibold mb-1 ${
                       selectedVoice?.name === voice.name ? 'text-indigo-700' : 'text-gray-900'
@@ -379,46 +367,41 @@ const VoiceGenerator = () => {
             <button
               onClick={generateMessage}
               disabled={loading || !userInput.trim() || !selectedVoice}
-              className={`w-full py-4 rounded-xl text-lg font-bold transition-all ${
-                loading || !userInput.trim() || !selectedVoice
-                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white shadow-lg hover:shadow-xl'
-              }`}
+              className="w-full py-4 rounded-xl text-lg font-bold transition-all"
+              style={(loading || !userInput.trim() || !selectedVoice) ? { background: 'var(--border)', color: 'var(--muted-text)', cursor: 'not-allowed' } : { background: 'linear-gradient(135deg, #ef4444, #b91c1c)', color: '#fff', boxShadow: '0 10px 30px rgba(0,0,0,0.12)' }}
             >
               {loading ? 'Crushing your dreams...' : '💀 Generate Demotivation'}
             </button>
 
             {/* Error Display */}
             {error && (
-              <div className="mt-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl">
+              <div style={{ marginTop: 16, background: 'rgba(248,113,113,0.05)', border: '1px solid rgba(248,113,113,0.2)', color: 'var(--text)', padding: '12px', borderRadius: 12 }}>
                 {error}
               </div>
             )}
 
             {/* Generated Message Display */}
             {generatedMessage && (
-              <div className="mt-8 bg-gradient-to-r from-red-50 to-red-100 border-2 border-red-300 rounded-xl p-6">
-                <h3 className="text-lg font-bold text-red-700 mb-3">
+              <div style={{ marginTop: 16, background: 'linear-gradient(135deg, rgba(248,113,113,0.03), rgba(239,68,68,0.03))', border: '1px solid rgba(248,113,113,0.16)', borderRadius: 12, padding: 16 }}>
+                <h3 style={{ fontSize: 18, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>
                   Your Demotivation Message:
                 </h3>
-                <p className="text-gray-800 text-lg italic mb-4">
+                <p style={{ color: 'var(--text)', fontStyle: 'italic', marginBottom: 12 }}>
                   "{generatedMessage}"
                 </p>
-                <div className="flex gap-3">
+                <div style={{ display: 'flex', gap: 12 }}>
                   <button
                     onClick={speakMessage}
                     disabled={speaking}
-                    className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
-                      speaking 
-                        ? 'bg-gray-400 text-gray-200 cursor-not-allowed' 
-                        : 'bg-green-600 hover:bg-green-700 text-white'
-                    }`}
+                    className="px-4 py-2 rounded-lg font-semibold"
+                    style={speaking ? { background: 'var(--border)', color: 'var(--muted-text)', cursor: 'not-allowed' } : { background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff' }}
                   >
                     {speaking ? '🔊 Speaking...' : '🔊 Play Voice'}
                   </button>
                   <button
                     onClick={shareMessage}
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors"
+                    className="px-4 py-2 rounded-lg font-semibold"
+                    style={{ background: 'linear-gradient(135deg,#3b82f6,#1e40af)', color: '#fff' }}
                   >
                     📤 Share
                   </button>

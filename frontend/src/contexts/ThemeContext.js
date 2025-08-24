@@ -19,9 +19,11 @@ export const ThemeProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
     if (isDarkMode) {
-      document.documentElement.classList.add('dark');
+  document.documentElement.classList.add('dark');
+  document.documentElement.classList.add('force-dark');
     } else {
-      document.documentElement.classList.remove('dark');
+  document.documentElement.classList.remove('dark');
+  document.documentElement.classList.remove('force-dark');
     }
   }, [isDarkMode]);
 

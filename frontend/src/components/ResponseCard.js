@@ -11,28 +11,30 @@ const ResponseCard = ({ response, tone }) => {
   };
 
   const getToneColor = (tone) => {
-    const colorMap = {
-      sarcasm: 'border-blue-300 bg-blue-50',
-      darkhumor: 'border-gray-400 bg-gray-50',
-      roast: 'border-red-300 bg-red-50'
-    };
-    return colorMap[tone] || 'border-blue-300 bg-blue-50';
+    // return an inline style object that uses tokens so the accents show in dark mode
+    switch (tone) {
+      case 'sarcasm':
+        return { borderColor: '#bfdbfe', background: 'rgba(59,130,246,0.06)' };
+      case 'darkhumor':
+        return { borderColor: 'rgba(156,163,175,0.5)', background: 'rgba(156,163,175,0.04)' };
+      case 'roast':
+        return { borderColor: 'rgba(248,113,113,0.6)', background: 'rgba(248,113,113,0.04)' };
+      default:
+        return { borderColor: '#bfdbfe', background: 'rgba(59,130,246,0.06)' };
+    }
   };
 
   return (
-    <div className={`
-      p-6 rounded-xl shadow-lg backdrop-blur-sm bg-white bg-opacity-80 
-      border-2 ${getToneColor(tone)} animate-bounce-in
-    `}>
+  <div className="p-6 rounded-xl shadow-lg backdrop-blur-sm card animate-bounce-in" style={{ borderWidth: 2, ...getToneColor(tone) }}>
       <div className="flex items-start space-x-3">
         <div className="text-2xl flex-shrink-0">
           {getToneEmoji(tone)}
         </div>
         <div className="flex-1">
-          <div className="text-sm text-gray-500 mb-2 font-medium capitalize">
+          <div className="text-sm mb-2 font-medium capitalize" style={{ color: 'var(--muted-text)' }}>
             {tone === 'darkhumor' ? 'Dark Humor' : tone} Mode
           </div>
-          <blockquote className="text-gray-800 text-lg leading-relaxed italic">
+          <blockquote className="text-lg leading-relaxed italic" style={{ color: 'var(--text)' }}>
             "{response}"
           </blockquote>
         </div>

@@ -135,3 +135,89 @@ code {
   transform: translateY(-8px) scale(1.02);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
+
+/* Global dark-mode overrides: apply when `.force-dark` is present on the document root */
+.force-dark html, .force-dark body, .force-dark #root {
+  background: #000 !important;
+  color: #e6eef8 !important;
+}
+
+/* Theme tokens: default (light) values. Components use these via var(--...) */
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --text: #0f172a; /* slate-900 */
+  --muted-text: #6b7280; /* slate-500 */
+  --border: rgba(15,23,42,0.06); /* subtle border */
+  --primary: #6366f1; /* indigo-500 */
+  --accent: #fb7185; /* rose-400 */
+  --card-shadow: 0 10px 30px rgba(2,6,23,0.06);
+  --scrollbar-thumb: rgba(124,58,237,0.5);
+}
+
+/* Dark token map (scoped under .force-dark) */
+.force-dark {
+  --bg: #000000;
+  --surface: #020202;
+  --text: #e6eef8;
+  --muted-text: #94a3b8;
+  --border: rgba(255,255,255,0.06);
+  --primary: #6366f1;
+  --accent: #fb7185;
+  --card-shadow: 0 10px 30px rgba(255,255,255,0.02);
+  --scrollbar-thumb: rgba(255,255,255,0.12);
+}
+
+/* Make Tailwind utility classes that assume white/light backgrounds display correctly */
+.force-dark .bg-white, .force-dark .bg-white\/80, .force-dark .bg-white\/90, .force-dark .bg-white\/95, .force-dark .bg-white\/70, .force-dark .bg-white\/60, .force-dark .bg-white\/50, .force-dark .bg-white\/30 {
+  background-color: #000 !important;
+}
+
+.force-dark .text-slate-900, .force-dark .text-gray-900, .force-dark .text-gray-800, .force-dark .text-slate-700, .force-dark .text-gray-700 {
+  color: #e6eef8 !important;
+}
+
+.force-dark .border-slate-100, .force-dark .border-gray-200, .force-dark .border-white\/20, .force-dark .border-white\/30 {
+  border-color: rgba(255,255,255,0.06) !important;
+}
+
+/* Cards and panels should remain slightly elevated with near-black surface */
+
+.force-dark .shadow, .force-dark .shadow-lg, .force-dark .shadow-xl, .force-dark .shadow-2xl {
+  --tw-shadow-color: rgba(255,255,255,0.03);
+}
+
+/* Inputs / buttons readability */
+.force-dark input, .force-dark textarea, .force-dark button, .force-dark select {
+  color: #f8fafc !important;
+  background: transparent !important;
+  border-color: rgba(255,255,255,0.06) !important;
+}
+
+/* Toasts / alerts: ensure readable on black */
+.force-dark .bg-red-100, .force-dark .bg-green-100, .force-dark .bg-yellow-100 {
+  background-color: rgba(255,255,255,0.03) !important;
+  color: #ffdede !important;
+}
+
+/* Ensure backdrop-blur elements don't become unreadable */
+.force-dark .backdrop-blur-md, .force-dark .backdrop-blur-lg, .force-dark .backdrop-blur-xl {
+  background-color: rgba(255,255,255,0.02) !important;
+}
+
+/* Force header/footer translucent dark */
+.force-dark .header-dark-override, .force-dark header, .force-dark footer, .force-dark .site-footer {
+  background: rgba(0,0,0,0.6) !important;
+  color: #e6eef8 !important;
+}
+
+/* Keep links visible */
+.force-dark a, .force-dark a:visited {
+  color: #7c3aed !important; /* purple-600 */
+}
+
+/* utilities to invert specific components if needed */
+.force-dark .force-light-text {
+  color: #f8fafc !important;
+}
+

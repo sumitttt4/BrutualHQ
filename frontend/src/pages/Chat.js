@@ -156,39 +156,65 @@ const Chat = () => {
     });
   };
 
+  const getBubbleStyle = (message) => {
+    if (message.type === 'user') {
+      return {
+        background: 'linear-gradient(135deg, var(--primary), var(--accent))',
+        color: '#fff',
+      };
+    }
+
+    if (message.mode === 'demotivation') {
+      return {
+        background: 'rgba(248,113,113,0.06)',
+        border: '1px solid rgba(248,113,113,0.28)',
+        color: 'var(--text)'
+      };
+    }
+
+    // default AI message
+    return {
+      background: 'var(--surface)',
+      border: '1px solid var(--border)',
+      color: 'var(--text)'
+    };
+  };
+
   return (
-    <div className="min-h-screen py-6 px-4">
+    <div className="min-h-screen py-6 px-4" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
       <div className="max-w-4xl mx-auto h-[calc(100vh-8rem)] flex flex-col">
         {/* Header */}
         <div className="text-center mb-6">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold mb-2" style={{ color: 'var(--text)' }}>
             AI Chat Assistant
           </h1>
-          <p className="text-gray-600">
+          <p style={{ color: 'var(--muted-text)' }}>
             Have a conversation with our AI. Ask questions, get advice, or just chat!
           </p>
         </div>
 
         {/* Chat Container */}
-        <div className="flex-1 bg-white/90 backdrop-blur-md rounded-xl shadow-xl flex flex-col overflow-hidden">
+  <div className="flex-1" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, boxShadow: 'var(--card-shadow)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
           {/* Chat Header */}
-          <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              <span className="font-medium text-gray-800">AI Assistant</span>
+          <div className="p-4" style={{ borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div className="flex items-center space-x-3">
+              <div className="w-3 h-3 bg-green-500 rounded-full" />
+              <span className="font-medium" style={{ color: 'var(--text)' }}>AI Assistant</span>
             </div>
             <div className="flex items-center space-x-2">
               <button
                 onClick={regenerateResponse}
                 disabled={isLoading || messages.length < 2}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="p-2 rounded-full"
+                style={{ color: 'var(--muted-text)', background: 'transparent' }}
                 title="Regenerate last response"
               >
                 <ArrowPathIcon className="h-4 w-4" />
               </button>
               <button
                 onClick={clearChat}
-                className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
+                className="p-2 rounded-full"
+                style={{ color: 'var(--muted-text)', background: 'transparent' }}
                 title="Clear chat"
               >
                 <TrashIcon className="h-4 w-4" />
@@ -197,20 +223,15 @@ const Chat = () => {
           </div>
 
           {/* Messages Area */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+    <div className="flex-1 overflow-y-auto p-4 space-y-4">
             {messages.map((message) => (
               <div
                 key={message.id}
                 className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-[80%] rounded-lg p-4 ${
-                    message.type === 'user'
-                      ? 'bg-indigo-600 text-white'
-                      : message.mode === 'demotivation'
-                      ? 'bg-red-50 border border-red-200 text-gray-800'
-                      : 'bg-gray-100 text-gray-800'
-                  }`}
+      className={`max-w-[80%] rounded-lg p-4`}
+      style={getBubbleStyle(message)}
                 >
                   {message.type === 'ai' && message.mode === 'demotivation' && (
                     <div className="flex items-center mb-2 text-red-600 text-sm font-medium">
@@ -223,11 +244,7 @@ const Chat = () => {
                   <div className="whitespace-pre-wrap leading-relaxed">
                     {message.content}
                   </div>
-                  <div
-                    className={`text-xs mt-2 ${
-                      message.type === 'user' ? 'text-indigo-200' : 'text-gray-500'
-                    }`}
-                  >
+                  <div className="text-xs mt-2" style={{ color: 'var(--muted-text)' }}>
                     {formatTime(message.timestamp)}
                   </div>
                 </div>
@@ -237,10 +254,10 @@ const Chat = () => {
             {/* Loading Indicator */}
             {isLoading && (
               <div className="flex justify-start">
-                <div className="bg-gray-100 rounded-lg p-4">
+                <div style={{ background: 'var(--surface)', borderRadius: 8, padding: 12 }}>
                   <div className="flex items-center space-x-2">
                     <LoadingSpinner />
-                    <span className="text-gray-600">AI is typing...</span>
+                    <span style={{ color: 'var(--muted-text)' }}>AI is typing...</span>
                   </div>
                 </div>
               </div>
@@ -249,7 +266,7 @@ const Chat = () => {
             {/* Error Message */}
             {error && (
               <div className="flex justify-center">
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-lg text-sm">
+                <div style={{ background: 'rgba(248,113,113,0.05)', border: '1px solid rgba(248,113,113,0.2)', color: 'var(--text)', padding: '8px 12px', borderRadius: 8 }}>
                   {error}
                 </div>
               </div>
@@ -259,7 +276,7 @@ const Chat = () => {
           </div>
 
           {/* Input Area */}
-          <div className="p-4 border-t border-gray-200">
+          <div style={{ padding: 16, borderTop: '1px solid var(--border)' }}>
             <div className="flex items-end space-x-3">
               <div className="flex-1">
                 <textarea
@@ -268,19 +285,17 @@ const Chat = () => {
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Type your message... (Press Enter to send, Shift+Enter for new line)"
-                  className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  className="w-full p-3 rounded-lg resize-none focus:outline-none"
                   rows="2"
                   disabled={isLoading}
+                  style={{ background: 'var(--bg)', color: 'var(--text)', border: '1px solid var(--border)' }}
                 />
               </div>
               <button
                 onClick={sendMessage}
                 disabled={!inputMessage.trim() || isLoading}
-                className={`p-3 rounded-lg transition-colors ${
-                  inputMessage.trim() && !isLoading
-                    ? 'bg-indigo-600 hover:bg-indigo-700 text-white'
-                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                }`}
+                className="p-3 rounded-lg transition-colors"
+                style={(!inputMessage.trim() || isLoading) ? { background: 'var(--border)', color: 'var(--muted-text)', cursor: 'not-allowed' } : { background: 'linear-gradient(135deg, var(--primary), var(--accent))', color: '#fff' }}
               >
                 <PaperAirplaneIcon className="h-5 w-5" />
               </button>

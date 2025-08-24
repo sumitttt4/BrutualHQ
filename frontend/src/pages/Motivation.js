@@ -197,15 +197,15 @@ const Motivation = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+    <div className="min-h-screen" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
       <div className="max-w-5xl mx-auto px-4 py-12">
         
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6" style={{ color: 'var(--text)' }}>
             AI Motivation Center
           </h1>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl max-w-3xl mx-auto leading-relaxed" style={{ color: 'var(--muted-text)' }}>
             Experience genuine AI-powered motivation. Sometimes you need encouragement to reach your potential.
           </p>
         </div>
@@ -233,11 +233,11 @@ const Motivation = () => {
                   <div className={`absolute -inset-0.5 bg-gradient-to-r ${type.color} rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-500`}></div>
                   
                   {/* Card Content */}
-                  <div className="relative bg-white rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 border border-slate-100 transform group-hover:-translate-y-2">
+                  <div className="relative rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform group-hover:-translate-y-2" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
                     <div className="text-center">
-                      <div className="text-5xl mb-6">{type.icon}</div>
-                      <h3 className="text-2xl font-bold text-slate-900 mb-4">{type.title}</h3>
-                      <p className="text-slate-600 leading-relaxed mb-6">{type.description}</p>
+                      <div className="text-5xl mb-6" style={{ color: 'var(--text)' }}>{type.icon}</div>
+                      <h3 className="text-2xl font-bold mb-4" style={{ color: 'var(--text)' }}>{type.title}</h3>
+                      <p className="leading-relaxed mb-6" style={{ color: 'var(--muted-text)' }}>{type.description}</p>
                       <button className={`w-full py-3 px-6 bg-gradient-to-r ${type.color} text-white font-semibold rounded-xl hover:scale-105 transition-transform duration-200 shadow-lg`}>
                         Generate {type.title}
                       </button>
@@ -249,17 +249,17 @@ const Motivation = () => {
 
             {/* Sample Insights */}
             <div className="grid md:grid-cols-2 gap-8">
-              <div className="bg-white/70 backdrop-blur-md rounded-2xl p-8 shadow-lg">
-                <h3 className="text-xl font-bold text-slate-900 mb-4">Sample Motivational Insights</h3>
-                <blockquote className="text-slate-700 italic leading-relaxed">
+              <div className="rounded-2xl p-8 shadow-lg" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+                <h3 className="text-xl font-bold mb-4" style={{ color: 'var(--text)' }}>Sample Motivational Insights</h3>
+                <blockquote className="italic leading-relaxed" style={{ color: 'var(--muted-text)' }}>
                   "Success is not final, failure is not fatal: it is the courage to continue that counts."
                 </blockquote>
-                <div className="text-sm text-slate-500 mt-2">- Inspirational Wisdom</div>
+                <div className="text-sm mt-2" style={{ color: 'var(--muted-text)' }}>- Inspirational Wisdom</div>
               </div>
 
-              <div className="bg-white/70 backdrop-blur-md rounded-2xl p-8 shadow-lg">
-                <h3 className="text-xl font-bold text-slate-900 mb-4">How It Works</h3>
-                <p className="text-slate-700 leading-relaxed">
+              <div className="rounded-2xl p-8 shadow-lg" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+                <h3 className="text-xl font-bold mb-4" style={{ color: 'var(--text)' }}>How It Works</h3>
+                <p className="leading-relaxed" style={{ color: 'var(--muted-text)' }}>
                   Our AI analyzes motivational patterns to provide genuine encouragement tailored to your chosen style and current mindset.
                 </p>
               </div>
@@ -270,7 +270,7 @@ const Motivation = () => {
         {/* Dramatic Motivation Sequence */}
         {mode === 'dramatic' && (
           <div className="animate-fade-in">
-            <div className="bg-white/95 backdrop-blur-md rounded-2xl p-8 md:p-12 shadow-2xl border-2 border-purple-200 max-w-3xl mx-auto">
+            <div className="rounded-2xl p-8 md:p-12 shadow-2xl max-w-3xl mx-auto" style={{ background: 'var(--surface)', border: '2px solid var(--border)' }}>
               
               {/* Progress Bar Section */}
               {showProgress && !showChoice && !showWarning && (
@@ -280,20 +280,20 @@ const Motivation = () => {
                   </h3>
                   
                   {/* Enhanced Progress Bar */}
-                  <div className="w-full bg-slate-200 rounded-full h-6 mb-6 overflow-hidden shadow-inner">
+                  <div className="w-full rounded-full h-6 mb-6 overflow-hidden shadow-inner" style={{ background: 'var(--border)' }}>
                     <div 
-                      className="h-full transition-all duration-500 ease-out rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 relative"
-                      style={{ width: `${progress}%` }}
+                      className="h-full transition-all duration-500 ease-out rounded-full relative"
+                      style={{ width: `${progress}%`, background: 'linear-gradient(90deg,var(--primary),var(--accent))' }}
                     >
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse"></div>
+                      <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.0) 100%)', animation: 'pulse 3s infinite' }}></div>
                     </div>
                   </div>
                   
-                  <p className="text-lg font-medium text-slate-600 mb-4">
+                  <p className="text-lg font-medium mb-4" style={{ color: 'var(--muted-text)' }}>
                     {progressText}
                   </p>
                   
-                  <div className="text-3xl font-bold text-purple-600 mb-6">
+                  <div className="text-3xl font-bold mb-6" style={{ color: 'var(--accent)' }}>
                     {Math.round(progress)}%
                   </div>
 
@@ -322,10 +322,10 @@ const Motivation = () => {
               {showWarning && (
                 <div className="text-center animate-pulse">
                   <div className="text-6xl mb-6">⚠️</div>
-                  <h3 className="text-3xl font-bold text-orange-600 mb-4">
+                  <h3 className="text-3xl font-bold mb-4" style={{ color: 'var(--accent)' }}>
                     WARNING
                   </h3>
-                  <p className="text-xl text-slate-700 leading-relaxed">
+                  <p className="text-xl leading-relaxed" style={{ color: 'var(--muted-text)' }}>
                     You are about to receive genuine motivation.<br/>
                     This may cause sudden bursts of productivity and optimism.
                   </p>
@@ -335,14 +335,14 @@ const Motivation = () => {
               {/* Enhanced Choice Section */}
               {showChoice && (
                 <div className="text-center">
-                  <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-8 leading-tight">
+                  <h2 className="text-3xl md:text-4xl font-extrabold mb-8 leading-tight" style={{ color: 'var(--text)' }}>
                     Are you absolutely sure you want motivation?
                   </h2>
                   
-                  <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border-l-4 border-yellow-400 p-6 rounded-lg mb-8">
-                    <p className="text-lg text-slate-700 leading-relaxed">
+                  <div className="p-6 rounded-lg mb-8" style={{ background: 'rgba(255, 210, 102, 0.08)', borderLeft: '4px solid #F6C84C' }}>
+                    <p className="text-lg leading-relaxed" style={{ color: 'var(--muted-text)' }}>
                       Last chance to back out before we hit you with the positivity...<br/>
-                      <span className="font-semibold">This cannot be undone.</span>
+                      <span className="font-semibold" style={{ color: 'var(--text)' }}>This cannot be undone.</span>
                     </p>
                   </div>
                   
@@ -376,22 +376,23 @@ const Motivation = () => {
         {/* Result Section */}
         {mode === 'result' && motivationResult && (
           <div className="animate-fade-in">
-            <div className="bg-white/95 backdrop-blur-md rounded-2xl p-8 md:p-12 shadow-2xl border-2 border-green-200 max-w-4xl mx-auto">
+            <div className="rounded-2xl p-8 md:p-12 shadow-2xl max-w-4xl mx-auto" style={{ background: 'var(--surface)', border: '2px solid var(--border)' }}>
               <div className="text-center">
                 <div className="text-6xl mb-6">🌟</div>
-                <h3 className="text-2xl md:text-3xl font-bold text-green-600 mb-8">
+                <h3 className="text-2xl md:text-3xl font-bold mb-8" style={{ color: 'var(--primary)' }}>
                   Your Motivation Has Arrived!
                 </h3>
                 
-                <div className="bg-gradient-to-r from-green-50 via-blue-50 to-purple-50 border-l-4 border-green-400 p-8 rounded-xl mb-8">
+                <div className="p-8 rounded-xl mb-8" style={{ background: 'linear-gradient(90deg, rgba(236,253,245,0.6), rgba(239,246,255,0.6))', borderLeft: '4px solid rgba(34,197,94,0.2)' }}>
                   {showTyping ? (
                     <TypingEffect 
                       text={motivationResult}
                       speed={30}
-                      className="text-lg md:text-xl text-slate-800 leading-relaxed"
+                      className="text-lg md:text-xl leading-relaxed"
+                      // ensure typing text uses token colors
                     />
                   ) : (
-                    <p className="text-lg md:text-xl text-slate-800 leading-relaxed">
+                    <p className="text-lg md:text-xl leading-relaxed" style={{ color: 'var(--text)' }}>
                       {motivationResult}
                     </p>
                   )}
@@ -425,8 +426,8 @@ const Motivation = () => {
                 </div>
 
                 {/* Share Buttons */}
-                <div className="pt-6 border-t border-slate-200">
-                  <h4 className="text-lg font-semibold text-slate-700 mb-4">
+                <div className="pt-6" style={{ borderTop: '1px solid var(--border)' }}>
+                  <h4 className="text-lg font-semibold mb-4" style={{ color: 'var(--muted-text)' }}>
                     Share the Positivity:
                   </h4>
                   <div className="flex flex-wrap gap-3 justify-center">
@@ -454,7 +455,7 @@ const Motivation = () => {
         {/* Back to Home */}
         {mode === 'selection' && (
           <div className="text-center mt-12">
-            <p className="text-slate-600 mb-4">
+            <p className="mb-4" style={{ color: 'var(--muted-text)' }}>
               Changed your mind about motivation?
             </p>
             <Link

@@ -27,6 +27,19 @@ const VoiceGenerator = () => {
     { id: 'reality-tv-host', name: 'Reality TV Host', description: 'Eliminates hope efficiently' }
   ];
 
+  // Demotivator styles / dropdown
+  const demotivatorModes = [
+    { id: 'mild', label: 'Mild Roast' },
+    { id: 'sarcastic', label: 'Sarcastic' },
+    { id: 'brutal', label: 'Brutal' },
+    { id: 'nihilist', label: 'Nihilist' },
+    { id: 'absurd', label: 'Absurdist' }
+  ];
+
+  const [selectedMode, setSelectedMode] = useState(demotivatorModes[2].id);
+  const [intensity, setIntensity] = useState(70);
+  const [savedMessages, setSavedMessages] = useState([]);
+
   const generateMessage = async () => {
     if (!userInput.trim() || !selectedVoice) {
       setError('Please enter a message and select a voice');
@@ -37,14 +50,16 @@ const VoiceGenerator = () => {
     setError('');
     
     try {
-      const response = await fetch('http://localhost:5000/api/generate-demotivation', {
+    const response = await fetch('http://localhost:5000/api/generate-demotivation', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           userInput: userInput.trim(),
-          voiceStyle: selectedVoice.id
+      voiceStyle: selectedVoice.id,
+      style: selectedMode,
+      intensity: intensity
         }),
       });
 
@@ -54,10 +69,32 @@ const VoiceGenerator = () => {
 
       const data = await response.json();
       setGeneratedMessage(data.message);
+      // add to saved/history for replay/share
+      setSavedMessages(prev => [{ id: Date.now(), text: data.message, mode: selectedMode, intensity }, ...prev].slice(0, 50));
     } catch (err) {
       setError(err.message || 'An error occurred while generating the message');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const applySamplePrompt = (prompt) => {
+    setUserInput(prompt);
+  };
+
+  const useSavedMessage = (msg) => {
+    setUserInput(msg.text);
+    setGeneratedMessage(msg.text);
+  };
+
+  const copyText = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      // small non-blocking feedback
+      // using alert keeps this simple for now
+      alert('Copied to clipboard');
+    } catch (e) {
+      console.error('copy failed', e);
     }
   };
 
@@ -274,7 +311,7 @@ const VoiceGenerator = () => {
           </p>
         </div>
 
-        {/* Input Mode Toggle */}
+  {/* Input Mode Toggle */}
         <div style={{
           display: 'flex',
           justifyContent: 'center',
@@ -316,7 +353,7 @@ const VoiceGenerator = () => {
         {/* Content Grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: inputMode === 'chat' ? '1fr 1fr' : '1fr',
+          gridTemplateColumns: inputMode === 'chat' ? '1fr 1fr' : '2fr 1fr',
           gap: '30px',
           marginBottom: '40px'
         }}>
@@ -560,6 +597,33 @@ const VoiceGenerator = () => {
               }}>
                 Choose your demotivator
               </label>
+
+              {/* Demotivator style dropdown + intensity */}
+              <div style={{ display: 'flex', gap: '12px', marginBottom: '12px', alignItems: 'center' }}>
+                <select
+                  value={selectedMode}
+                  onChange={(e) => setSelectedMode(e.target.value)}
+                  style={{ padding: '10px 12px', borderRadius: '8px', border: '1px solid #e1e5e9', background: 'white', cursor: 'pointer' }}
+                >
+                  {demotivatorModes.map(m => (
+                    <option key={m.id} value={m.id}>{m.label}</option>
+                  ))}
+                </select>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <label style={{ fontSize: '13px', color: '#6c757d' }}>Intensity</label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={intensity}
+                    onChange={(e) => setIntensity(Number(e.target.value))}
+                    style={{ cursor: 'pointer' }}
+                  />
+                  <div style={{ minWidth: '36px', textAlign: 'right', color: '#6c757d', fontWeight: '600' }}>{intensity}</div>
+                </div>
+              </div>
+
               <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
@@ -634,6 +698,11 @@ const VoiceGenerator = () => {
             >
               {loading ? 'Crushing your dreams...' : '💀 Generate Demotivation'}
             </button>
+
+            {/* Small help / inspiration */}
+            <div style={{ marginBottom: '18px', color: '#6c757d', fontSize: '13px' }}>
+              Need ideas? Click a sample prompt from the right sidebar or pick a style above.
+            </div>
 
             {/* Error Display */}
             {error && (
@@ -714,6 +783,44 @@ const VoiceGenerator = () => {
                 </div>
               </div>
             )}
+          </div>
+
+          {/* Right Sidebar: Inspiration & History */}
+          <div style={{
+            borderRadius: '12px',
+            padding: '18px',
+            background: '#ffffff',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.06)'
+          }}>
+            <h4 style={{ marginTop: 0, marginBottom: '12px', color: '#2c3e50' }}>Inspiration</h4>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
+              {[
+                'I finally finished my project and it was...',
+                "I have a brilliant startup idea that will...",
+                'My partner said I am the best because...',
+                'I am going to apply for that dream job because...'
+              ].map((p, i) => (
+                <button key={i} onClick={() => applySamplePrompt(p)} style={{ padding: '8px 10px', borderRadius: '999px', border: '1px solid #e6e6e6', background: '#f8f9fa', cursor: 'pointer', fontSize: '13px' }}>{p.length > 40 ? p.slice(0, 40) + '…' : p}</button>
+              ))}
+            </div>
+
+            <h4 style={{ marginTop: 0, marginBottom: '12px', color: '#2c3e50' }}>History</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '420px', overflowY: 'auto' }}>
+              {savedMessages.length === 0 ? (
+                <div style={{ color: '#6c757d', fontSize: '13px' }}>No generated messages yet — create one to save it here.</div>
+              ) : (
+                savedMessages.map(msg => (
+                  <div key={msg.id} style={{ border: '1px solid #f0f0f0', padding: '10px', borderRadius: '8px', background: '#fff' }}>
+                    <div style={{ fontSize: '13px', color: '#2c3e50', marginBottom: '6px' }}>{msg.text.length > 120 ? msg.text.slice(0, 120) + '…' : msg.text}</div>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <button onClick={() => useSavedMessage(msg)} style={{ padding: '6px 10px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>Use</button>
+                      <button onClick={() => copyText(msg.text)} style={{ padding: '6px 10px', background: '#f1f1f1', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>Copy</button>
+                      <button onClick={() => { setSavedMessages(prev => prev.filter(m => m.id !== msg.id)); }} style={{ padding: '6px 10px', background: '#fff7f8', border: '1px solid #fdecea', color: '#dc3545', borderRadius: '6px', cursor: 'pointer' }}>Delete</button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         </div>
       </div>

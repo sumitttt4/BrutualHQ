@@ -29,9 +29,10 @@ const Header = () => {
 
   const navigation = [
     { name: 'Home', href: '/', alt: 'Go to Home' },
-    { name: 'Generator', href: '/generator', alt: 'Open Generator' },
-  { name: 'Voice Demotivation', href: '/voice', alt: 'Try Voice Demotivation' },
+    { name: 'RoastMe', href: '/roast', alt: 'Get Roasted' },
     { name: 'Chat', href: '/chat', alt: 'Open Chat' },
+    { name: 'Voice', href: '/voice', alt: 'Open Voice Studio' },
+    { name: 'Demotivation', href: '/generator', alt: 'Open Demotivation' },
     { name: 'Motivation', href: '/motivation', alt: 'Get Motivation' },
   ];
 
@@ -51,12 +52,13 @@ const Header = () => {
 
   return (
     <>
-      <header className="backdrop-blur-md bg-white/70 dark:bg-gray-900/70 border-b border-white/20 dark:border-gray-700/20 sticky top-0 z-50">
+  <header className="backdrop-blur-md sticky top-0 z-50" style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <Link 
               to="/" 
-              className="text-2xl font-bold text-gray-900 dark:text-white transition-colors hover:text-indigo-600 dark:hover:text-indigo-400"
+              className="text-2xl font-bold transition-colors"
+              style={{ color: 'var(--text)' }}
             >
               BrutualHQ
             </Link>
@@ -68,11 +70,11 @@ const Header = () => {
                   key={item.name}
                   to={item.href}
                   aria-label={item.alt}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    isActive(item.href)
-                      ? 'bg-indigo-100 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300'
-                      : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
-                  }`}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200`}
+                  style={isActive(item.href)
+                    ? { background: 'rgba(99,102,241,0.08)', color: 'var(--accent)' }
+                    : { color: 'var(--muted-text)' }
+                  }
                 >
                   {item.name}
                 </Link>
@@ -84,8 +86,9 @@ const Header = () => {
               {/* Theme Toggle */}
               <button
                 onClick={toggleTheme}
-                className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                className="p-2 rounded-lg transition-colors"
                 aria-label="Toggle theme"
+                style={{ color: 'var(--muted-text)' }}
               >
                 {isDarkMode ? (
                   <SunIcon className="h-5 w-5" />
@@ -99,7 +102,8 @@ const Header = () => {
                 <div className="relative">
                   <button
                     onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                    className="flex items-center space-x-2 p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    className="flex items-center space-x-2 p-2 rounded-lg transition-colors"
+                    style={{ color: 'var(--muted-text)' }}
                   >
                     <UserIcon className="h-5 w-5" />
                     <span className="text-sm font-medium">{user?.name}</span>
@@ -112,11 +116,12 @@ const Header = () => {
 
                   {/* User Dropdown */}
                   {isUserMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50">
+                    <div className="absolute right-0 mt-2 w-48 rounded-xl shadow-lg py-2 z-50" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
                       <Link
                         to="/dashboard"
                         onClick={() => setIsUserMenuOpen(false)}
-                        className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        className="flex items-center space-x-2 px-4 py-2 text-sm"
+                        style={{ color: 'var(--text)' }}
                       >
                         <CogIcon className="h-4 w-4" />
                         <span>Dashboard</span>
@@ -128,18 +133,21 @@ const Header = () => {
                             setShowPricingModal(true);
                             setIsUserMenuOpen(false);
                           }}
-                          className="flex items-center space-x-2 w-full px-4 py-2 text-sm text-purple-600 dark:text-purple-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          className="flex items-center space-x-2 w-full px-4 py-2 text-sm"
+                          style={{ color: 'var(--accent)' }}
+                        
                         >
                           <span>⭐</span>
                           <span>Upgrade to Pro</span>
                         </button>
                       )}
                       
-                      <hr className="my-2 border-gray-200 dark:border-gray-600" />
+                      <hr className="my-2" style={{ borderColor: 'var(--border)' }} />
                       
                       <button
                         onClick={handleLogout}
-                        className="flex items-center space-x-2 w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        className="flex items-center space-x-2 w-full px-4 py-2 text-sm"
+                        style={{ color: 'var(--text)' }}
                       >
                         <ArrowRightOnRectangleIcon className="h-4 w-4" />
                         <span>Sign Out</span>
@@ -151,7 +159,8 @@ const Header = () => {
                 <div className="flex items-center space-x-3">
                   <Link
                     to="/auth"
-                    className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+                    className="px-4 py-2 text-sm font-medium transition-colors"
+                    style={{ color: 'var(--muted-text)' }}
                   >
                     Sign In
                   </Link>
@@ -163,7 +172,8 @@ const Header = () => {
             <div className="md:hidden">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="p-2 rounded-lg"
+                style={{ color: 'var(--muted-text)' }}
               >
                 {isMenuOpen ? (
                   <XMarkIcon className="h-6 w-6" />
@@ -183,11 +193,11 @@ const Header = () => {
                     key={item.name}
                     to={item.href}
                     onClick={() => setIsMenuOpen(false)}
-                    className={`px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
-                      isActive(item.href)
-                        ? 'bg-indigo-100 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300'
-                        : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
-                    }`}
+                    className={`px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200`}
+                    style={isActive(item.href)
+                      ? { background: 'rgba(99,102,241,0.08)', color: 'var(--accent)' }
+                      : { color: 'var(--muted-text)' }
+                    }
                   >
                     {item.name}
                   </Link>
@@ -199,7 +209,8 @@ const Header = () => {
                     toggleTheme();
                     setIsMenuOpen(false);
                   }}
-                  className="flex items-center space-x-2 px-4 py-3 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                  className="flex items-center space-x-2 px-4 py-3 text-sm font-medium rounded-lg transition-colors"
+                  style={{ color: 'var(--muted-text)' }}
                 >
                   {isDarkMode ? (
                     <>

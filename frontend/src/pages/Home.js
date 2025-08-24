@@ -547,6 +547,44 @@ const Home = () => {
             </div>
           </div>
 
+          {/* FAQ Section */}
+          <section id="faq" className="mt-12 text-left">
+            <h3 className="text-2xl font-semibold mb-4" style={{ color: 'var(--text)' }}>Frequently asked questions</h3>
+            <div className="grid md:grid-cols-2 gap-4">
+              {[
+                {
+                  q: 'What is BrutualHQ?',
+                  a: 'BrutualHQ is an AI-powered experience for blunt, humorous demotivation and roast content — useful for jokes, team rituals, and irreverent entertainment.'
+                },
+                {
+                  q: 'Is the content safe for work?',
+                  a: 'We provide options and filters; some modes are explicit or very direct. Use the milder modes for workplace-friendly output.'
+                },
+                {
+                  q: 'Can I use the voices commercially?',
+                  a: 'Voice usage may be subject to licensing and third-party provider terms. Check the pricing and licensing section or contact us for enterprise use.'
+                },
+                {
+                  q: 'What if the AI fails to generate?',
+                  a: 'We have retry logic and friendly fallback messages — if the service fails we surface a fallback roast and log events so we can improve reliability.'
+                },
+                {
+                  q: 'How do I report abuse or a safety problem?',
+                  a: 'Use the Contact link in the footer or the support widget to report problematic outputs. We review reports and update filters promptly.'
+                },
+                {
+                  q: 'Do you store my prompts or messages?',
+                  a: 'We store minimal usage metadata to improve quality; we do not sell personal data. See our Privacy page for details.'
+                }
+              ].map((item, idx) => (
+                <details key={idx} className="p-4 rounded-lg" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+                  <summary className="font-medium mb-2" style={{ color: 'var(--text)', cursor: 'pointer' }}>{item.q}</summary>
+                  <div className="mt-2" style={{ color: 'var(--muted-text)', lineHeight: 1.6 }}>{item.a}</div>
+                </details>
+              ))}
+            </div>
+          </section>
+
           {/* Email capture */}
           <form
             onSubmit={async (e) => {

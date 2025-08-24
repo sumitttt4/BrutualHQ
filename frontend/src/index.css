@@ -168,17 +168,22 @@ code {
   --scrollbar-thumb: rgba(255,255,255,0.12);
 }
 
-/* Make Tailwind utility classes that assume white/light backgrounds display correctly */
-.force-dark .bg-white, .force-dark .bg-white\/80, .force-dark .bg-white\/90, .force-dark .bg-white\/95, .force-dark .bg-white\/70, .force-dark .bg-white\/60, .force-dark .bg-white\/50, .force-dark .bg-white\/30 {
-  background-color: #000 !important;
+/* Map common Tailwind utility classes to theme tokens so existing markup becomes theme-aware.
+   :root defines light tokens and `.force-dark` overrides them for dark (all-black) mode. */
+.bg-white, .bg-white\/80, .bg-white\/90, .bg-white\/95, .bg-white\/70, .bg-white\/60, .bg-white\/50, .bg-white\/30 {
+  background-color: var(--surface) !important;
 }
 
-.force-dark .text-slate-900, .force-dark .text-gray-900, .force-dark .text-gray-800, .force-dark .text-slate-700, .force-dark .text-gray-700 {
-  color: #e6eef8 !important;
+.text-slate-900, .text-gray-900, .text-gray-800, .text-slate-700, .text-gray-700 {
+  color: var(--text) !important;
 }
 
-.force-dark .border-slate-100, .force-dark .border-gray-200, .force-dark .border-white\/20, .force-dark .border-white\/30 {
-  border-color: rgba(255,255,255,0.06) !important;
+.text-slate-600, .text-gray-600, .text-slate-500, .text-slate-400 {
+  color: var(--muted-text) !important;
+}
+
+.border-slate-100, .border-gray-200, .border-white\/20, .border-white\/30 {
+  border-color: var(--border) !important;
 }
 
 /* Cards and panels should remain slightly elevated with near-black surface */
